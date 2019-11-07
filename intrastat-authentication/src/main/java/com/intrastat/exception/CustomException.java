@@ -2,6 +2,12 @@ package com.intrastat.exception;
 
 import org.springframework.http.HttpStatus;
 
+/**
+ * 
+ * @author shivaprasad
+ *
+ */
+
 public class CustomException extends RuntimeException {
 
   private static final long serialVersionUID = 1L;

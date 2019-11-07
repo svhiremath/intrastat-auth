@@ -14,6 +14,12 @@ import com.intrastat.model.Role;
 import com.intrastat.model.User;
 import com.intrastat.service.UserService;
 
+/**
+ * 
+ * @author shivaprasad
+ *
+ */
+
 @SpringBootApplication
 public class JwtAuthServiceApp implements CommandLineRunner {
 

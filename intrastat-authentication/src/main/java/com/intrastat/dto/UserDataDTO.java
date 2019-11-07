@@ -6,6 +6,12 @@ import com.intrastat.model.Role;
 
 import io.swagger.annotations.ApiModelProperty;
 
+/**
+ * 
+ * @author shivaprasad
+ *
+ */
+
 public class UserDataDTO {
   
   @ApiModelProperty(position = 0)

@@ -26,6 +26,12 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+/**
+ * 
+ * @author shivaprasad
+ *
+ */
+
 @Component
 public class JwtTokenProvider {
 

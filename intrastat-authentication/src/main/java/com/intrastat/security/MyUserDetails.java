@@ -9,6 +9,12 @@ import org.springframework.stereotype.Service;
 import com.intrastat.model.User;
 import com.intrastat.repository.UserRepository;
 
+/**
+ * 
+ * @author shivaprasad
+ *
+ */
+
 @Service
 public class MyUserDetails implements UserDetailsService {
 

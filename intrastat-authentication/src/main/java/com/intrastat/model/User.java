@@ -11,6 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Size;
 
+/**
+ * 
+ * @author shivaprasad
+ *
+ */
+
 @Entity
 public class User {
 

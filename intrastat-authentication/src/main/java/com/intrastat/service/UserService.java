@@ -15,6 +15,12 @@ import com.intrastat.model.User;
 import com.intrastat.repository.UserRepository;
 import com.intrastat.security.JwtTokenProvider;
 
+/**
+ * 
+ * @author shivaprasad
+ *
+ */
+
 @Service
 public class UserService {
 
