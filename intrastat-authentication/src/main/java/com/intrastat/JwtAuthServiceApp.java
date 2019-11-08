@@ -52,6 +52,14 @@ public class JwtAuthServiceApp implements CommandLineRunner {
     client.setRoles(new ArrayList<Role>(Arrays.asList(Role.ROLE_CLIENT)));
 
     userService.signup(client);
+    
+    User client1 = new User();
+    client1.setUsername("kooud");
+    client1.setPassword("kooud1234");
+    client1.setEmail("kooud@email.com");
+    client1.setRoles(new ArrayList<Role>(Arrays.asList(Role.ROLE_USER)));
+    
+    userService.signup(client1);
   }
 
 }
