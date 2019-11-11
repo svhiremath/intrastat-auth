@@ -30,7 +30,7 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
-			<!-- JPA Data (Repositories, Entities, Hibernate, etc..) -->
+			 <!--JPA Data (Repositories, Entities, Hibernate, etc..) -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
@@ -62,18 +62,6 @@
             <scope>runtime</scope>
         </dependency>
 
-		<dependency>
-			<!-- Automated JSON API documentation for API's built with Spring -->
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>2.7.0</version>
-		</dependency>
-		<dependency>
-			<!-- Generate beautiful documentation from a Swagger-compliant API. -->
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>2.7.0</version>
-		</dependency>
 		<dependency>
 			<!-- JSON Web Token Support -->
 			<groupId>io.jsonwebtoken</groupId>

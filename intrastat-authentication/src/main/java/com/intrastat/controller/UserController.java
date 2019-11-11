@@ -1,16 +1,19 @@
 package com.intrastat.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,12 +21,6 @@ import com.intrastat.dto.UserDataDTO;
 import com.intrastat.dto.UserResponseDTO;
 import com.intrastat.model.User;
 import com.intrastat.service.UserService;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
 /**
  * 
@@ -33,77 +30,53 @@ import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/users")
-@Api(tags = "users")
 public class UserController {
 
-  @Autowired
-  private UserService userService;
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+	@Autowired
+	private UserService userService;
 
-  @Autowired
-  private ModelMapper modelMapper;
+	@Autowired
+	private ModelMapper modelMapper;
 
-  @PostMapping("/signin")
-  @ApiOperation(value = "${UserController.signin}")
-  @ApiResponses(value = {//
-      @ApiResponse(code = 400, message = "Something went wrong"), //
-      @ApiResponse(code = 422, message = "Invalid username/password supplied")})
-  public String login(//
-      @ApiParam("Username") @RequestParam String username, //
-      @ApiParam("Password") @RequestParam String password) {
-    return userService.signin(username, password);
-  }
+	@RequestMapping(method = RequestMethod.POST , value = "/signin")
+	public String login(@RequestParam String username,  @RequestParam String password) {
+		return userService.signin(username, password);
+	}
 
-  @PostMapping("/signup")
-  @ApiOperation(value = "${UserController.signup}")
-  @ApiResponses(value = {//
-      @ApiResponse(code = 400, message = "Something went wrong"), //
-      @ApiResponse(code = 403, message = "Access denied"), //
-      @ApiResponse(code = 422, message = "Username is already in use"), //
-      @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
-  public String signup(@ApiParam("Signup User") @RequestBody UserDataDTO user) {
-    return userService.signup(modelMapper.map(user, User.class));
-  }
+	@RequestMapping(method = RequestMethod.POST , value = "/signup",  consumes = MediaType.APPLICATION_JSON_VALUE )
+	public String signup(@RequestBody UserDataDTO user) {
+		LOGGER.debug("user: ", user);
+		return userService.signup(modelMapper.map(user, User.class));
+	}
 
-  @DeleteMapping(value = "/{username}")
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
-  @ApiOperation(value = "${UserController.delete}")
-  @ApiResponses(value = {//
-      @ApiResponse(code = 400, message = "Something went wrong"), //
-      @ApiResponse(code = 403, message = "Access denied"), //
-      @ApiResponse(code = 404, message = "The user doesn't exist"), //
-      @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
-  public String delete(@ApiParam("Username") @PathVariable String username) {
-    userService.delete(username);
-    return username;
-  }
+	@RequestMapping(method = RequestMethod.DELETE , value = "/{username}",  produces = MediaType.APPLICATION_JSON_VALUE )
+	public String delete(@PathVariable String username) {
+		LOGGER.debug("username: ", username);
+		userService.delete(username);
+		return username;
+	}
 
-  @GetMapping(value = "/{username}")
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
-  @ApiOperation(value = "${UserController.search}", response = UserResponseDTO.class)
-  @ApiResponses(value = {//
-      @ApiResponse(code = 400, message = "Something went wrong"), //
-      @ApiResponse(code = 403, message = "Access denied"), //
-      @ApiResponse(code = 404, message = "The user doesn't exist"), //
-      @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
-  public UserResponseDTO search(@ApiParam("Username") @PathVariable String username) {
-    return modelMapper.map(userService.search(username), UserResponseDTO.class);
-  }
+	@RequestMapping(method = RequestMethod.GET , value = "/{username}",  produces = MediaType.APPLICATION_JSON_VALUE )
+	public UserResponseDTO search(@PathVariable String username) {
+		LOGGER.debug("username: ", username);
+		return modelMapper.map(userService.search(username), UserResponseDTO.class);
+	}
 
-  @GetMapping(value = "/me")
-  @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT') or hasRole('ROLE_USER')")
-  @ApiOperation(value = "${UserController.me}", response = UserResponseDTO.class)
-  @ApiResponses(value = {//
-      @ApiResponse(code = 400, message = "Something went wrong"), //
-      @ApiResponse(code = 403, message = "Access denied"), //
-      @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
-  public UserResponseDTO whoami(HttpServletRequest req) {
-    return modelMapper.map(userService.whoami(req), UserResponseDTO.class);
-  }
+	@RequestMapping(method = RequestMethod.GET , value = "/getUser",  produces = MediaType.APPLICATION_JSON_VALUE )
+	public UserResponseDTO getCurrentUser(HttpServletRequest req) {
+		return modelMapper.map(userService.getCurrentUser(req), UserResponseDTO.class);
+	}
 
-  @GetMapping("/refresh")
-  @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
-  public String refresh(HttpServletRequest req) {
-    return userService.refresh(req.getRemoteUser());
-  }
+	@GetMapping("/refresh")
+	public String refresh(HttpServletRequest req) {
+		return userService.refresh(req.getRemoteUser());
+	}
+
+	@RequestMapping(method = RequestMethod.GET , value = "/allusers",  produces = MediaType.APPLICATION_JSON_VALUE )
+	public List<User> getAllUsers(){
+		return userService.getAllUsers();
+	}
 
 }
+
